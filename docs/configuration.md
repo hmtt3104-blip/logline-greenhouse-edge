@@ -1,4 +1,4 @@
-# Configuration
+﻿# Configuration
 
 Configuration is environment-driven.
 
@@ -17,4 +17,4 @@ Configuration is environment-driven.
 
 ## Example paths
 
-Use `/opt/logline-greenhouse-edge/...` in service examples. Local development may use any uncommitted path outside the repository.
+Use `/path/to/logline-greenhouse-edge/...` in service examples. Local development may use any uncommitted path outside the repository.

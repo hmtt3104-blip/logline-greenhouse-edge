@@ -1,4 +1,4 @@
-# Deployment Notes
+﻿# Deployment Notes
 
 This document describes sanitized service patterns for a Raspberry Pi edge experiment.
 
@@ -10,7 +10,7 @@ Example units live in `systemd/`:
 - `logline-dualzone-logger.service.example`
 - `logline-singlezone-logger.service.example`
 
-They use `/opt/logline-greenhouse-edge` and user `logline` as placeholders.
+They use `/path/to/logline-greenhouse-edge` and user `logline` as placeholders.
 
 ## Local generated data
 

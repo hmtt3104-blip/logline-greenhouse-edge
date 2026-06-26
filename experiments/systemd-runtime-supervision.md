@@ -1,4 +1,4 @@
-# systemd runtime supervision
+﻿# systemd runtime supervision
 
 ## Problem
 
@@ -10,7 +10,7 @@ Small systemd units can supervise the bridge and loggers without embedding priva
 
 ## Experiment
 
-Provide sanitized service examples using `/opt/logline-greenhouse-edge` and user `logline`.
+Provide sanitized service examples using `/path/to/logline-greenhouse-edge` and user `logline`.
 
 ## Status
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
@@ -79,7 +79,7 @@ class Config:
 def load_config() -> Config:
     return Config(
         base_url=env_str("DUALZONE_LOGGER_BASE_URL", "http://greenhouse-device.local").rstrip("/"),
-        out_dir=Path(env_str("DUALZONE_LOGGER_OUT_DIR", "/opt/logline-greenhouse-edge/data/dualzone-web-logs")),
+        out_dir=Path(env_str("DUALZONE_LOGGER_OUT_DIR", "/path/to/logline-greenhouse-edge/data/dualzone-web-logs")),
         status_interval_sec=env_float("DUALZONE_LOGGER_STATUS_INTERVAL_SEC", 5.0),
         events_interval_sec=env_float("DUALZONE_LOGGER_EVENTS_INTERVAL_SEC", 2.0),
         timeout_sec=env_float("DUALZONE_LOGGER_TIMEOUT_SEC", 8.0),

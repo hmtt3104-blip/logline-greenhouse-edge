@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
@@ -18,7 +18,7 @@ from urllib.request import Request, urlopen
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 LOG_PATH = SCRIPT_DIR / "logs" / "network_check.log"
-NODE_RED_DATA_DIR = Path("/opt/logline-greenhouse-edge/private/nodered-data-example")
+NODE_RED_DATA_DIR = Path("/path/to/logline-greenhouse-edge/private/nodered-data-example")
 DEFAULT_TIMEOUT_SEC = 2.0
 PING_COUNT = 4
 HTTP_ATTEMPTS = 3

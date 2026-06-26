@@ -4,6 +4,14 @@ Raspberry Pi edge runtime experiments for greenhouse climate telemetry, MQTT ing
 
 Status: `Prototype / sanitized public export`
 
+## Foundation
+
+This repository follows the public standards and operating model defined in:
+
+https://github.com/hmtt3104-blip/logline-foundation
+
+Logline Foundation defines how public experiments are documented, reviewed, sanitized, and linked across repositories.
+
 ## What this is
 
 This repository is a public Logline experiment around a Raspberry Pi edge runtime for greenhouse automation. It explores how a small local process can collect telemetry, normalize state, dispatch guarded control commands, and supervise helper loggers.

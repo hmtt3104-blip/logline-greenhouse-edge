@@ -1,4 +1,4 @@
-[Unit]
+﻿[Unit]
 Description=Logline greenhouse edge bridge
 After=network-online.target
 Wants=network-online.target
@@ -6,9 +6,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=logline
-WorkingDirectory=/opt/logline-greenhouse-edge
-EnvironmentFile=-/opt/logline-greenhouse-edge/.env
-ExecStart=/opt/logline-greenhouse-edge/scripts/run_edge_bridge.sh
+WorkingDirectory=/path/to/logline-greenhouse-edge
+EnvironmentFile=-/path/to/logline-greenhouse-edge/.env
+ExecStart=/path/to/logline-greenhouse-edge/scripts/run_edge_bridge.sh
 Restart=on-failure
 RestartSec=5
 
