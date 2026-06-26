@@ -1,0 +1,16 @@
+[Unit]
+Description=Logline single-zone greenhouse logger
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=logline
+WorkingDirectory=/opt/logline-greenhouse-edge
+EnvironmentFile=-/opt/logline-greenhouse-edge/.env
+ExecStart=/opt/logline-greenhouse-edge/scripts/run_singlezone_logger.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

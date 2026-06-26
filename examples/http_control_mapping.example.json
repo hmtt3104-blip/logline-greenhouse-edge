@@ -1,0 +1,43 @@
+{
+  "greenhouse1": {
+    "base_url": "{greenhouse1_base_url_or_router_url}",
+    "control_path": "/control",
+    "status_path": "/status",
+    "commands": {
+      "g1.set_mode:auto": "auto",
+      "g1.set_mode:manual": "manual",
+      "g1.stop": "stop",
+      "g1.reset_alarm": "resetalarm",
+      "g1.clear_wifi": "clearwifi",
+      "g1.zone1.step_open": "z1_open",
+      "g1.zone1.step_close": "z1_close",
+      "g1.zone1.full_open": "z1_fullopen",
+      "g1.zone1.full_close": "z1_fullclose",
+      "g1.zone1.extra_close": "z1_extra",
+      "g1.zone2.step_open": "z2_open",
+      "g1.zone2.step_close": "z2_close",
+      "g1.zone2.full_open": "z2_fullopen",
+      "g1.zone2.full_close": "z2_fullclose",
+      "g1.zone2.extra_close": "z2_extra",
+      "g1.aux.aux_open": "aux_open",
+      "g1.aux.aux_close": "aux_close",
+      "g1.aux.aux_stop": "aux_stop"
+    }
+  },
+  "greenhouse2": {
+    "base_url": "{greenhouse2_base_url_or_router_url}",
+    "control_path": "/control",
+    "status_path": "/status",
+    "commands": {
+      "g2.set_mode:auto": "auto",
+      "g2.set_mode:manual": "manual",
+      "g2.step_open": "open",
+      "g2.step_close": "close",
+      "g2.full_open": "fullopen",
+      "g2.full_close": "fullclose",
+      "g2.extra_close": "extra",
+      "g2.stop": "stop",
+      "g2.clear_wifi": "clearwifi"
+    }
+  }
+}

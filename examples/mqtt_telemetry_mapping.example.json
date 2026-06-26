@@ -1,0 +1,53 @@
+{
+  "greenhouse1": {
+    "zone1": {
+      "temp": "greenhouse/example/telemetry/greenhouse1/zone1/temp",
+      "humidity": "greenhouse/example/telemetry/greenhouse1/zone1/humidity",
+      "level": "greenhouse/example/telemetry/greenhouse1/zone1/level",
+      "close_threshold": "greenhouse/example/telemetry/greenhouse1/zone1/close_threshold",
+      "state": "greenhouse/example/telemetry/greenhouse1/zone1/state"
+    },
+    "zone2": {
+      "temp": "greenhouse/example/telemetry/greenhouse1/zone2/temp",
+      "humidity": "greenhouse/example/telemetry/greenhouse1/zone2/humidity",
+      "level": "greenhouse/example/telemetry/greenhouse1/zone2/level",
+      "close_threshold": "greenhouse/example/telemetry/greenhouse1/zone2/close_threshold",
+      "state": "greenhouse/example/telemetry/greenhouse1/zone2/state"
+    },
+    "mode": "greenhouse/example/telemetry/greenhouse1/mode",
+    "alarm": "greenhouse/example/telemetry/greenhouse1/alarm",
+    "water": "greenhouse/example/telemetry/greenhouse1/water",
+    "shade_state": "greenhouse/example/telemetry/greenhouse1/shade_state",
+    "router_status": "greenhouse/example/telemetry/greenhouse1/router_status",
+    "router_url": "greenhouse/example/telemetry/greenhouse1/router_url",
+    "wifi_rssi": "greenhouse/example/telemetry/greenhouse1/wifi_rssi",
+    "reset_reason": "greenhouse/example/telemetry/greenhouse1/reset_reason",
+    "wifi_disconnect_reason": "greenhouse/example/telemetry/greenhouse1/wifi_disconnect_reason",
+    "wind": "greenhouse/example/telemetry/greenhouse1/wind",
+    "rain": "greenhouse/example/telemetry/greenhouse1/rain",
+    "status_topic": "greenhouse/example/status/greenhouse1",
+    "events_topic": "greenhouse/example/events/greenhouse1",
+    "ts": "$derived:last_mqtt_update_iso"
+  },
+  "greenhouse2": {
+    "temp": "greenhouse/example/telemetry/greenhouse2/temp",
+    "humidity": "greenhouse/example/telemetry/greenhouse2/humidity",
+    "level": "greenhouse/example/telemetry/greenhouse2/level",
+    "close_threshold": "greenhouse/example/telemetry/greenhouse2/close_threshold",
+    "state": "greenhouse/example/telemetry/greenhouse2/state",
+    "mode": "greenhouse/example/telemetry/greenhouse2/mode",
+    "last_action": "greenhouse/example/telemetry/greenhouse2/last_action",
+    "sensor_errors": "greenhouse/example/telemetry/greenhouse2/sensor_errors",
+    "time": "greenhouse/example/telemetry/greenhouse2/time",
+    "rtc_status": "greenhouse/example/telemetry/greenhouse2/rtc_status",
+    "sd_status": "greenhouse/example/telemetry/greenhouse2/sd_status",
+    "storage_status": "greenhouse/example/telemetry/greenhouse2/storage_status",
+    "router_status": "greenhouse/example/telemetry/greenhouse2/router_status",
+    "router_url": "greenhouse/example/telemetry/greenhouse2/router_url",
+    "wifi_rssi": "greenhouse/example/telemetry/greenhouse2/wifi_rssi",
+    "wifi_disconnect_reason": "greenhouse/example/telemetry/greenhouse2/wifi_disconnect_reason",
+    "status_topic": "greenhouse/example/status/greenhouse2",
+    "events_topic": "greenhouse/example/events/greenhouse2",
+    "ts": "$derived:last_mqtt_update_iso"
+  }
+}
