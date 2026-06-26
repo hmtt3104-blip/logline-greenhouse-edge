@@ -150,5 +150,5 @@ Planned candidates:
 ## Related repositories
 
 - `logline-foundation`: public standards and operating model for Logline.
+- `logline-greenhouse-firmware`: sanitized ESP32-S3 dual-zone greenhouse firmware experiment.
 - `logline-greenhouse-ai`: Raspberry Pi greenhouse climate monitoring and computer vision prototype.
-- Future `logline-greenhouse-firmware`: ESP32 / greenhouse controller firmware export.
