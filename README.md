@@ -1,8 +1,12 @@
 # logline-greenhouse-edge
 
-Raspberry Pi edge runtime experiments for greenhouse climate telemetry, MQTT ingestion, Firebase-style sync, HTTP control dispatch, and systemd supervision.
+Raspberry Pi edge runtime experiments for greenhouse climate telemetry, MQTT ingestion, Firebase-style sync, HTTP dispatch, and systemd supervision.
 
-Status: `Prototype / sanitized public export`
+## What this is
+
+`logline-greenhouse-edge` is a sanitized public Logline export for exploring a Raspberry Pi edge runtime in greenhouse automation.
+
+It documents how a small local process can collect telemetry, normalize state, dispatch guarded control commands, supervise helper loggers, and stay separate from private runtime configuration.
 
 ## Foundation
 
@@ -12,13 +16,11 @@ https://github.com/hmtt3104-blip/logline-foundation
 
 Logline Foundation defines how public experiments are documented, reviewed, sanitized, and linked across repositories.
 
-## What this is
-
-This repository is a public Logline experiment around a Raspberry Pi edge runtime for greenhouse automation. It explores how a small local process can collect telemetry, normalize state, dispatch guarded control commands, and supervise helper loggers.
-
 ## Problem
 
-Small greenhouse systems often grow from separate scripts: telemetry readers, command bridges, local loggers, and service wrappers. The hard part is making the edge layer understandable, observable, and repeatable without exposing private runtime details.
+Small greenhouse systems often grow from separate scripts: telemetry readers, command bridges, local loggers, and service wrappers.
+
+The hard part is making the edge layer understandable, observable, and repeatable without exposing private runtime details.
 
 ## Hypothesis
 
@@ -26,7 +28,9 @@ A Raspberry Pi can act as a clear edge boundary when configuration, device mappi
 
 ## Experiment
 
-The export contains a sanitized bridge package, logger scripts, example mappings, run wrappers, and systemd examples. It keeps the engineering shape while replacing private hosts, paths, and environment values with public placeholders.
+The export contains a sanitized bridge package, logger scripts, example mappings, run wrappers, tests, and systemd examples.
+
+It preserves the engineering shape of the edge runtime while replacing private hosts, usernames, paths, runtime maps, logs, and environment values with public placeholders.
 
 ## Architecture
 
@@ -50,17 +54,51 @@ See `docs/architecture.md`.
 
 ## Current status
 
+Repository status: `Prototype`
+
+Public readiness: `READY / Sanitized public export`
+
+Trust level: `Medium`
+
+Current boundaries:
+
 - Bridge and logger code are imported from a private working/runtime repository.
 - Private IPs, local usernames, private paths, runtime maps, and generated outputs are excluded or rewritten.
 - The experiment records are drafts and need validation against the sanitized export.
+- This repository is not a production deployment package.
 
-## Safety notes
+## Results / Lessons
+
+- A Raspberry Pi edge layer is a useful boundary between greenhouse devices, telemetry, and higher-level interfaces.
+- Config templates are safer than publishing real runtime values.
+- Systemd examples are useful, but must remain generic and placeholder-based.
+- Local loggers should be documented as helpers, not as hidden production runbooks.
+- Clean export is safer than publishing a working runtime repository with old operational history.
+
+## What failed / remains incomplete
+
+- Experiment records are still draft-level.
+- Sanitized examples need validation on a non-private test environment.
+- The Firebase-style sync boundary is documented, but not presented as a real public service setup.
+- Device mappings are examples only; real greenhouse topology stays private.
+- Release status is not ready yet.
+
+## Next questions
+
+- Which edge-runtime components are reusable as generic templates?
+- Which parts should stay greenhouse-specific?
+- What is the smallest reproducible local test environment?
+- Should command dispatch be documented as a separate decision record?
+- Which logger behavior should be promoted to a repeatable experiment?
+
+## Safety / Security notes
 
 - Do not commit `.env`.
 - Do not commit service-account JSON files.
 - Do not commit Telegram tokens.
 - Keep HTTP control endpoints local unless deliberately isolated.
-- Treat device addresses, greenhouse topology, and runtime paths as private.
+- Treat device addresses, greenhouse topology, private usernames, and runtime paths as private.
+- Do not publish generated logs, state files, backups, or runtime outputs.
 
 See `docs/safety.md` and `SECURITY.md`.
 
@@ -90,3 +128,27 @@ cp .env.example .env
 ```
 
 Use placeholder hosts first, then replace values only in local `.env`.
+
+## Related experiments
+
+- `experiments/raspberry-bridge-bootstrap.md`
+- `experiments/mqtt-telemetry-ingestion.md`
+- `experiments/firebase-command-sync.md`
+- `experiments/http-command-dispatch.md`
+- `experiments/systemd-runtime-supervision.md`
+
+## Related decision records
+
+No accepted decision records yet.
+
+Planned candidates:
+
+- edge runtime public export boundary;
+- command dispatch safety boundary;
+- systemd supervision model.
+
+## Related repositories
+
+- `logline-foundation`: public standards and operating model for Logline.
+- `logline-greenhouse-ai`: Raspberry Pi greenhouse climate monitoring and computer vision prototype.
+- Future `logline-greenhouse-firmware`: ESP32 / greenhouse controller firmware export.
