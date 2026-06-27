@@ -99,6 +99,7 @@ Current boundaries:
 
 - Experiment records are still draft-level.
 - Sanitized examples need validation on a non-private test environment.
+- HTTP command dispatch still needs mock or non-production validation before any live-device claim.
 - The Firebase-style sync boundary is documented, but not presented as a real public service setup.
 - Device mappings are examples only; real greenhouse topology stays private.
 - Release status is not ready yet.
