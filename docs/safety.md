@@ -8,7 +8,7 @@ Production readiness: Not production-ready.
 
 This repository is a sanitized public Logline export. The private working/runtime repository is maintained separately and is not part of this public history.
 
-The repository remains `NEEDS_CLEANUP` until experiment records, sanitized examples, command-dispatch safety, systemd examples, and public-readiness checklist evidence are reviewed against the sanitized export.
+The public-readiness checklist result is recorded below as `NEEDS_CLEANUP`. The repository remains `NEEDS_CLEANUP` until experiment records, sanitized examples, command-dispatch safety, systemd examples, and reproducibility evidence are reviewed against the sanitized export.
 
 ## Public readiness checklist result
 
