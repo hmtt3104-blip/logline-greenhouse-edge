@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
@@ -10,6 +10,10 @@ from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
+
+
+def project_root() -> Path:
+    return Path(__file__).resolve().parents[1]
 
 
 def utc_now_iso() -> str:
@@ -67,9 +71,10 @@ class Config:
 
 
 def load_config() -> Config:
+    default_out_dir = project_root() / "data" / "singlezone-web-logs"
     return Config(
         base_url=env_str("SINGLEZONE_LOGGER_BASE_URL", "http://greenhouse-device.local").rstrip("/"),
-        out_dir=Path(env_str("SINGLEZONE_LOGGER_OUT_DIR", "/path/to/logline-greenhouse-edge/data/singlezone-web-logs")),
+        out_dir=Path(env_str("SINGLEZONE_LOGGER_OUT_DIR", str(default_out_dir))),
         status_interval_sec=env_float("SINGLEZONE_LOGGER_STATUS_INTERVAL_SEC", 5.0),
         timeout_sec=env_float("SINGLEZONE_LOGGER_TIMEOUT_SEC", 8.0),
     )
@@ -148,17 +153,12 @@ def transition_snapshot(status: dict[str, Any]) -> dict[str, Any]:
         "hum",
         "level",
         "close",
+        "openRelay",
+        "closeRelay",
+        "routerConnected",
+        "wifiState",
+        "wifiRssi",
         "message",
-        "routerStatus",
-        "routerUrl",
-        "wifiDisconnectReason",
-        "sensorStatus",
-        "rtcStatus",
-        "sdStatus",
-        "logStatus",
-        "sensorErrors",
-        "tempRaw",
-        "timeNow",
     ]
     return {key: status.get(key) for key in keys}
 
@@ -167,67 +167,46 @@ def append_transition_log(out_dir: Path, state: LoggerState, status: dict[str, A
     previous = state.last_transition_snapshot
     current = transition_snapshot(status)
     changes: list[str] = []
-
     for key, current_value in current.items():
         previous_value = previous.get(key)
         if previous_value != current_value:
             changes.append(f"{key}: {previous_value!r} -> {current_value!r}")
-
     if not changes:
         return 0
-
-    append_line(
-        transitions_daily_path(out_dir),
-        f"[{utc_now_iso()}] " + " | ".join(changes),
-    )
+    append_line(transitions_daily_path(out_dir), f"[{utc_now_iso()}] " + " | ".join(changes))
     state.last_transition_snapshot = current
     return len(changes)
 
 
-def append_event(out_dir: Path, message: str) -> None:
+def log_fetch_error(out_dir: Path, state: LoggerState, exc: Exception) -> None:
+    state.consecutive_failures += 1
+    state.last_fetch_ok = False
+    message = f"status fetch failed #{state.consecutive_failures}: {exc}"
     append_line(events_daily_path(out_dir), f"[{utc_now_iso()}] {message}")
+    print_log(message)
 
 
 def main() -> int:
     cfg = load_config()
     ensure_dir(cfg.out_dir)
     state = LoggerState(cfg.out_dir / "state.json")
-
-    status_url = f"{cfg.base_url}/status"
-    print_log(f"Single-zone logger started. base_url={cfg.base_url} out_dir={cfg.out_dir}")
-    append_event(cfg.out_dir, f"logger started base_url={cfg.base_url}")
-
-    next_status_at = 0.0
+    print_log(f"singlezone logger base_url={cfg.base_url} out_dir={cfg.out_dir}")
 
     while True:
-        now = time.time()
-
-        if now >= next_status_at:
-            try:
-                status = fetch_json(status_url, cfg.timeout_sec)
-                append_status_snapshot(cfg.out_dir, status, cfg.base_url)
-                append_transition_log(cfg.out_dir, state, status)
-                if not state.last_fetch_ok and state.consecutive_failures:
-                    append_event(cfg.out_dir, f"STATUS fetch recovered after {state.consecutive_failures} failure(s)")
-                state.last_status = status
-                state.last_fetch_ok = True
-                state.consecutive_failures = 0
-                state.save()
-            except (HTTPError, URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-                state.consecutive_failures += 1
-                state.last_fetch_ok = False
-                message = f"STATUS fetch failed: {exc}"
-                append_event(cfg.out_dir, message)
-                print_log(message)
-                state.save()
-            next_status_at = now + cfg.status_interval_sec
-
-        time.sleep(0.25)
+        try:
+            status = fetch_json(f"{cfg.base_url}/status", cfg.timeout_sec)
+            append_status_snapshot(cfg.out_dir, status, cfg.base_url)
+            changes = append_transition_log(cfg.out_dir, state, status)
+            state.last_status = status
+            state.consecutive_failures = 0
+            state.last_fetch_ok = True
+            state.save()
+            print_log(f"status logged changes={changes}")
+        except (HTTPError, URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
+            log_fetch_error(cfg.out_dir, state, exc)
+            state.save()
+        time.sleep(cfg.status_interval_sec)
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except KeyboardInterrupt:
-        print_log("Single-zone logger stopped by keyboard interrupt")
-        raise SystemExit(0)
+    raise SystemExit(main())
