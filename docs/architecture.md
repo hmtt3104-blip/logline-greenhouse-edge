@@ -2,6 +2,8 @@
 
 This export models a Raspberry Pi edge runtime for greenhouse experiments.
 
+It documents the public shape of the edge layer, not a production deployment guarantee.
+
 ## Flow
 
 ```text
@@ -22,7 +24,9 @@ Device status endpoints
 
 - Configuration comes from environment variables.
 - Device addresses are placeholders in public examples.
-- Command dispatch passes through mapping and guard layers.
+- Bridge defaults are conservative for public testing: dry-run enabled, command polling disabled, legacy command ingress disabled, Firebase disabled, Telegram egress disabled, and direct control bound to `127.0.0.1`.
+- Command dispatch passes through mapping and guard layers, but production safety is not proven in this public export.
+- Live-device dispatch requires separate review of target devices, command limits, network exposure, authentication or isolation, timeout behavior, and failure behavior.
 - Logger outputs are local generated data and are not committed.
 
 ## Main modules
