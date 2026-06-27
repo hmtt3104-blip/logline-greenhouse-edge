@@ -66,16 +66,18 @@ Repository status: `Prototype`
 
 Public readiness: `NEEDS_CLEANUP`
 
-Trust level: `Medium for documentation shape; low for production safety and sanitized runtime validation`
+Trust level: `Medium for documentation shape and safe defaults; low for production safety and sanitized runtime validation`
 
 Production readiness: `Not production-ready`
 
 Reason for public readiness status:
 
 - The export is sanitized and excludes private IPs, private usernames, private paths, runtime maps, generated outputs, and deployment secrets.
+- Public-readiness checklist result is recorded in `docs/safety.md` as `NEEDS_CLEANUP`.
+- Bridge runtime defaults now use a safer public posture: dry-run enabled, Telegram egress disabled, command polling disabled, and legacy command ingress disabled unless explicitly enabled.
+- Logger default outputs use repo-local generated-output directories under `data/`.
 - Experiment records are draft-level and need validation against the sanitized export.
 - Sanitized examples need validation on a non-private test environment.
-- Public-readiness checklist result has not yet been recorded.
 - This repository should not be treated as pinned, flagship-ready, release-ready, or public-readiness `READY` until Foundation gate evidence exists.
 
 Current boundaries:
