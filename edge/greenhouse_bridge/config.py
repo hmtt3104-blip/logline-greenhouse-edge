@@ -10,7 +10,7 @@ class BridgeConfig:
     telegram_chat_id: str
     mqtt_host: str
     mqtt_port: int
-    telegram_egress_enabled: bool = True
+    telegram_egress_enabled: bool = False
     greenhouse1_base_url: str = ""
     greenhouse2_base_url: str = ""
     temperature_node_base_url: str = ""
@@ -25,8 +25,8 @@ class BridgeConfig:
     log_level: str = "INFO"
     pi_to_app_key_b64: str = ""
     app_to_pi_key_b64: str = ""
-    command_polling_enabled: bool = True
-    legacy_command_ingress_enabled: bool = True
+    command_polling_enabled: bool = False
+    legacy_command_ingress_enabled: bool = False
     firebase_enabled: bool = False
     firebase_database_url: str = ""
     firebase_service_account_json: str = ""
@@ -43,15 +43,16 @@ class BridgeConfig:
     firebase_command_expire_sec: int = 90
     firebase_stale_state_sec: int = 45
     greenhouse1_status_poll_interval_sec: float = 5.0
-    dry_run: bool = False
+    dry_run: bool = True
 
     @classmethod
     def from_env(cls, prefix: str = "GREENHOUSE_BRIDGE_") -> "BridgeConfig":
+        firebase_enabled = cls._bool_env(os.getenv(f"{prefix}FIREBASE_ENABLED", "0"))
         return cls(
             telegram_bot_token=cls._require(prefix, "TELEGRAM_BOT_TOKEN"),
             telegram_chat_id=cls._require(prefix, "TELEGRAM_CHAT_ID"),
             telegram_egress_enabled=cls._bool_env(
-                os.getenv(f"{prefix}TELEGRAM_EGRESS_ENABLED", "1")
+                os.getenv(f"{prefix}TELEGRAM_EGRESS_ENABLED", "0")
             ),
             mqtt_host=cls._require(prefix, "MQTT_HOST"),
             mqtt_port=int(cls._require(prefix, "MQTT_PORT")),
@@ -78,17 +79,12 @@ class BridgeConfig:
             pi_to_app_key_b64=cls._require(prefix, "PI_TO_APP_KEY_B64"),
             app_to_pi_key_b64=cls._require(prefix, "APP_TO_PI_KEY_B64"),
             command_polling_enabled=cls._bool_env(
-                os.getenv(f"{prefix}COMMAND_POLLING_ENABLED", "1")
+                os.getenv(f"{prefix}COMMAND_POLLING_ENABLED", "0")
             ),
             legacy_command_ingress_enabled=cls._bool_env(
-                os.getenv(
-                    f"{prefix}LEGACY_COMMAND_INGRESS_ENABLED",
-                    "0" if cls._bool_env(os.getenv(f"{prefix}FIREBASE_ENABLED", "0")) else "1",
-                )
+                os.getenv(f"{prefix}LEGACY_COMMAND_INGRESS_ENABLED", "0")
             ),
-            firebase_enabled=cls._bool_env(
-                os.getenv(f"{prefix}FIREBASE_ENABLED", "0")
-            ),
+            firebase_enabled=firebase_enabled,
             firebase_database_url=os.getenv(f"{prefix}FIREBASE_DATABASE_URL", "").strip(),
             firebase_service_account_json=os.getenv(
                 f"{prefix}FIREBASE_SERVICE_ACCOUNT_JSON", ""
@@ -153,7 +149,7 @@ class BridgeConfig:
             greenhouse1_status_poll_interval_sec=float(
                 os.getenv(f"{prefix}GREENHOUSE1_STATUS_POLL_INTERVAL_SEC", "5.0")
             ),
-            dry_run=cls._bool_env(os.getenv(f"{prefix}DRY_RUN", "0")),
+            dry_run=cls._bool_env(os.getenv(f"{prefix}DRY_RUN", "1")),
         )
 
     @staticmethod
