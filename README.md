@@ -32,6 +32,14 @@ The export contains a sanitized bridge package, logger scripts, example mappings
 
 It preserves the engineering shape of the edge runtime while replacing private hosts, usernames, paths, runtime maps, logs, and environment values with public placeholders.
 
+What is intentionally not treated as proven in this export:
+
+- safe use against live greenhouse devices;
+- production Firebase/service-account configuration;
+- production command-dispatch safety;
+- complete validation of sanitized systemd examples;
+- complete validation of draft experiment records.
+
 ## Architecture
 
 ```text
@@ -56,15 +64,25 @@ See `docs/architecture.md`.
 
 Repository status: `Prototype`
 
-Public readiness: `READY / Sanitized public export`
+Public readiness: `NEEDS_CLEANUP`
 
-Trust level: `Medium`
+Trust level: `Medium for documentation shape; low for production safety and sanitized runtime validation`
+
+Production readiness: `Not production-ready`
+
+Reason for public readiness status:
+
+- The export is sanitized and excludes private IPs, private usernames, private paths, runtime maps, generated outputs, and deployment secrets.
+- Experiment records are draft-level and need validation against the sanitized export.
+- Sanitized examples need validation on a non-private test environment.
+- Public-readiness checklist result has not yet been recorded.
+- This repository should not be treated as pinned, flagship-ready, release-ready, or public-readiness `READY` until Foundation gate evidence exists.
 
 Current boundaries:
 
 - Bridge and logger code are imported from a private working/runtime repository.
 - Private IPs, local usernames, private paths, runtime maps, and generated outputs are excluded or rewritten.
-- The experiment records are drafts and need validation against the sanitized export.
+- Device mappings are examples only; real greenhouse topology stays private.
 - This repository is not a production deployment package.
 
 ## Results / Lessons
