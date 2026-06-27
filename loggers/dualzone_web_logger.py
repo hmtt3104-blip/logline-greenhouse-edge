@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
@@ -11,6 +11,10 @@ from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
+
+
+def project_root() -> Path:
+    return Path(__file__).resolve().parents[1]
 
 
 def utc_now_iso() -> str:
@@ -77,9 +81,10 @@ class Config:
 
 
 def load_config() -> Config:
+    default_out_dir = project_root() / "data" / "dualzone-web-logs"
     return Config(
         base_url=env_str("DUALZONE_LOGGER_BASE_URL", "http://greenhouse-device.local").rstrip("/"),
-        out_dir=Path(env_str("DUALZONE_LOGGER_OUT_DIR", "/path/to/logline-greenhouse-edge/data/dualzone-web-logs")),
+        out_dir=Path(env_str("DUALZONE_LOGGER_OUT_DIR", str(default_out_dir))),
         status_interval_sec=env_float("DUALZONE_LOGGER_STATUS_INTERVAL_SEC", 5.0),
         events_interval_sec=env_float("DUALZONE_LOGGER_EVENTS_INTERVAL_SEC", 2.0),
         timeout_sec=env_float("DUALZONE_LOGGER_TIMEOUT_SEC", 8.0),
@@ -260,44 +265,38 @@ def main() -> int:
     ensure_dir(cfg.out_dir)
     state = LoggerState(cfg.out_dir / "state.json")
 
-    status_url = f"{cfg.base_url}/status"
-    events_url = f"{cfg.base_url}/events.txt?limit={cfg.events_limit}"
+    print_log(f"dualzone logger base_url={cfg.base_url} out_dir={cfg.out_dir}")
 
-    print_log(f"Dual-zone logger started. base_url={cfg.base_url} out_dir={cfg.out_dir}")
-
-    next_status_at = 0.0
-    next_events_at = 0.0
+    next_status = 0.0
+    next_events = 0.0
 
     while True:
-        now = time.time()
-
-        if now >= next_status_at:
+        now = time.monotonic()
+        if now >= next_status:
             try:
-                status = fetch_json(status_url, cfg.timeout_sec)
+                status = fetch_json(f"{cfg.base_url}/status", cfg.timeout_sec)
                 append_status_snapshot(cfg.out_dir, status, cfg.base_url)
-                append_transition_log(cfg.out_dir, state, status)
+                changes = append_transition_log(cfg.out_dir, state, status)
                 state.last_status = status
                 state.save()
-            except (HTTPError, URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-                log_fetch_error(cfg.out_dir, "STATUS", exc)
-            next_status_at = now + cfg.status_interval_sec
+                print_log(f"status logged changes={changes}")
+            except (HTTPError, URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
+                log_fetch_error(cfg.out_dir, "status", exc)
+            next_status = now + cfg.status_interval_sec
 
-        if now >= next_events_at:
+        if now >= next_events:
             try:
-                text = fetch_text(events_url, cfg.timeout_sec)
-                new_count = append_new_events(cfg.out_dir, state, text)
-                if new_count:
-                    state.save()
+                events = fetch_text(f"{cfg.base_url}/events?limit={cfg.events_limit}", cfg.timeout_sec)
+                written = append_new_events(cfg.out_dir, state, events)
+                state.save()
+                if written:
+                    print_log(f"events appended={written}")
             except (HTTPError, URLError, TimeoutError, OSError) as exc:
-                log_fetch_error(cfg.out_dir, "EVENTS", exc)
-            next_events_at = now + cfg.events_interval_sec
+                log_fetch_error(cfg.out_dir, "events", exc)
+            next_events = now + cfg.events_interval_sec
 
-        time.sleep(0.25)
+        time.sleep(0.2)
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except KeyboardInterrupt:
-        print_log("Dual-zone logger stopped by keyboard interrupt")
-        raise SystemExit(0)
+    raise SystemExit(main())
