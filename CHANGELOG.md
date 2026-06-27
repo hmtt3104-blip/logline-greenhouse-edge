@@ -15,6 +15,7 @@
 - Documented the evidence required before the repository can be treated as `READY`.
 - Changed bridge runtime defaults to a safer public posture: dry-run enabled, Telegram egress disabled, command polling disabled, and legacy command ingress disabled unless explicitly enabled.
 - Changed logger default output directories to repo-local `data/dualzone-web-logs` and `data/singlezone-web-logs` generated-output locations.
+- Clarified that HTTP command dispatch needs mock or non-production validation before any live-device safety claim.
 
 ### Security
 
