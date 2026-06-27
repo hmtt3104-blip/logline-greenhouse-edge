@@ -8,6 +8,8 @@ __pycache__/
 .venv/
 venv/
 logs/
+data/dualzone-web-logs/
+data/singlezone-web-logs/
 *.log
 *.ndjson
 latest-status.json
