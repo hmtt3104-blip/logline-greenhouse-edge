@@ -15,9 +15,10 @@ Reason: this repository is a sanitized public Logline export, but sanitized brid
 - [x] Publish a sanitized public export without private runtime history.
 - [x] Exclude private IP maps, private paths, private usernames, service-account JSON, tokens, generated logs, and runtime outputs.
 - [x] Record the public-readiness checklist result in `docs/safety.md`.
+- [x] Review logger defaults after sanitization.
+- [x] Expand setup and configuration docs.
+- [x] Align bridge runtime defaults with safe public posture.
 - [ ] Validate sanitized bridge imports.
-- [ ] Review logger defaults after sanitization.
-- [ ] Expand setup and configuration docs.
 - [ ] Add decision records for edge boundaries.
 - [ ] Define the smallest non-private reproducible local test environment.
 
@@ -49,7 +50,6 @@ Reason: this repository is a sanitized public Logline export, but sanitized brid
 Public readiness should remain `NEEDS_CLEANUP` until:
 
 - sanitized bridge imports are validated;
-- logger defaults are reviewed after sanitization;
 - command-dispatch behavior is tested against a non-production target or mock;
 - systemd examples are validated with generic paths and placeholder env files;
 - draft experiment records are updated against the sanitized export;
