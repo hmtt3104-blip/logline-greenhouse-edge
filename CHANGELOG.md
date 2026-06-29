@@ -7,6 +7,7 @@
 - Created sanitized public export skeleton for Logline greenhouse edge experiments.
 - Added public-readiness checklist result in `docs/safety.md`.
 - Added Foundation-aligned status, safety, and roadmap language.
+- Added a no-hardware synthetic integration test for `.env.example` config loading, direct state-store telemetry normalization, and localhost mock HTTP command dispatch.
 
 ### Changed
 
@@ -17,7 +18,7 @@
 - Changed logger default output directories to repo-local `data/dualzone-web-logs` and `data/singlezone-web-logs` generated-output locations.
 - Allow public dry-run bridge configuration to load without Telegram tokens or crypto keys while optional integrations remain disabled.
 - Updated bootstrap, MQTT, and Firebase experiment records to distinguish verified dry-run/import/config behavior from unvalidated live MQTT/Firebase/device behavior.
-- Clarified that HTTP command dispatch needs mock or non-production validation before any live-device safety claim.
+- Clarified that localhost mock HTTP command dispatch is validated, while real ESP command dispatch still needs non-production hardware validation before any live-device safety claim.
 - Clarified architecture safety boundaries for conservative defaults and live-device dispatch review.
 - Clarified that systemd service examples are placeholders and need non-private validation before production claims.
 

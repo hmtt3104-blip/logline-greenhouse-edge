@@ -18,23 +18,26 @@ The public export should validate telemetry ingestion with synthetic MQTT messag
 
 Dry-run bridge configuration and Python tests passed in the sanitized export.
 
+No-hardware pytest updates the state store directly with synthetic `greenhouse/example/...` telemetry topics.
+
 This confirms that the bridge package can import and load safe local configuration without private secrets.
 
-It does not confirm live MQTT ingestion behavior.
+It does not confirm live MQTT broker ingestion behavior.
 
 ## Current result
 
 - Bridge import/config baseline: PASS.
-- Public-safe live MQTT ingestion replay: NOT VALIDATED.
+- Direct synthetic telemetry normalization: PASS.
+- Public-safe live MQTT broker replay: NOT VALIDATED.
 - Real greenhouse MQTT topics: excluded from public export.
 
 ## Status
 
-Draft / dry-run baseline verified / MQTT replay still needed.
+Draft / dry-run baseline verified / direct synthetic telemetry verified / MQTT broker replay still needed.
 
 ## Trust level
 
-Medium for repository shape, configuration boundary, and state-store testability.
+Medium for repository shape, configuration boundary, state-store testability, and direct synthetic telemetry normalization.
 
 Low for live MQTT ingestion until validated with synthetic messages or a non-private local broker.
 

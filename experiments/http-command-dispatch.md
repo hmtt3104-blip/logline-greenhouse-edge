@@ -10,7 +10,7 @@ A command guard plus explicit mapping table reduces accidental unsafe dispatch.
 
 ## Experiment
 
-Use sanitized HTTP control mapping examples with placeholder device hosts.
+Use sanitized HTTP control mapping examples with placeholder device hosts and a localhost mock control endpoint.
 
 The public export should test command dispatch only against a mock, placeholder, or non-production target.
 
@@ -19,18 +19,28 @@ It must not be treated as safe for live greenhouse device control until target d
 ## Evidence status
 
 - Placeholder mapping exists.
+- No-hardware pytest dispatches a synthetic `g2.stop` command to a localhost mock `/control` endpoint.
+- The test asserts the target URL stays on `127.0.0.1` and the firmware command body is `cmd=stop`.
 - Public-safe live-device evidence does not exist in this export.
-- Non-production dispatch replay or mock testing still needs to be documented.
+- Real ESP command dispatch still needs non-production hardware validation.
+
+## Current result
+
+- Localhost mock HTTP command dispatch: PASS.
+- Real ESP command dispatch: NOT VALIDATED.
+- Live greenhouse command safety: NOT VALIDATED.
 
 ## Status
 
-Draft from sanitized export.
+Draft / localhost mock validated / needs non-production hardware validation.
 
-Public readiness impact: keeps repository at `NEEDS_CLEANUP` until dispatch behavior is validated safely.
+Public readiness impact: keeps repository at `NEEDS_CLEANUP` until real device boundaries, authentication/isolation, and failure behavior are validated safely.
 
 ## Trust level
 
-Low-Medium. The public shape is useful, but production safety is not proven.
+Medium for command mapping and localhost mock dispatch.
+
+Low for real ESP or production safety until tested outside live greenhouse systems.
 
 ## Next question
 

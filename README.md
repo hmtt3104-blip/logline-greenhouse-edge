@@ -76,6 +76,7 @@ Reason for public readiness status:
 - Public-readiness checklist result is recorded in `docs/safety.md` as `NEEDS_CLEANUP`.
 - Bridge runtime defaults now use a safer public posture: dry-run enabled, Telegram egress disabled, command polling disabled, and legacy command ingress disabled unless explicitly enabled.
 - `.env.example` can load bridge configuration without Telegram tokens or crypto keys while those optional integrations remain disabled.
+- No-hardware synthetic integration now verifies config loading, direct state-store telemetry normalization, and HTTP command dispatch against a localhost mock target.
 - Logger default outputs use repo-local generated-output directories under `data/`.
 - Experiment records are draft-level and need validation against the sanitized export.
 - Sanitized examples need validation on a non-private test environment.
@@ -92,6 +93,8 @@ Current boundaries:
 
 - A Raspberry Pi edge layer is a useful boundary between greenhouse devices, telemetry, and higher-level interfaces.
 - Config templates are safer than publishing real runtime values.
+- Synthetic telemetry can update the local state store without a real MQTT broker.
+- A guarded HTTP command can dispatch to a localhost mock without reaching a real ESP device.
 - Systemd examples are useful, but must remain generic and placeholder-based.
 - Local loggers should be documented as helpers, not as hidden production runbooks.
 - Clean export is safer than publishing a working runtime repository with old operational history.
@@ -100,8 +103,9 @@ Current boundaries:
 
 - Experiment records are still draft-level.
 - Sanitized examples need validation on a non-private test environment.
-- HTTP command dispatch still needs mock or non-production validation before any live-device claim.
+- Real ESP HTTP command dispatch still needs non-production hardware validation before any live-device claim.
 - The Firebase-style sync boundary is documented, but not presented as a real public service setup.
+- Real MQTT broker ingestion is not validated; the current public test covers direct synthetic state-store updates only.
 - Device mappings are examples only; real greenhouse topology stays private.
 - Release status is not ready yet.
 
@@ -152,6 +156,12 @@ Validate public dry-run configuration without contacting live services:
 
 ```bash
 PYTHONPATH=edge python -c "from greenhouse_bridge.config import BridgeConfig; BridgeConfig.from_env(); print('config OK')"
+```
+
+Run no-hardware tests without real MQTT, Firebase, Telegram, or ESP devices:
+
+```bash
+PYTHONPATH=edge python -m pytest
 ```
 
 Use placeholder hosts first, then replace values only in local `.env`. Do not start the full bridge runtime against placeholder hosts; use a non-private local broker, mocks, or explicitly reviewed test endpoints before running:
