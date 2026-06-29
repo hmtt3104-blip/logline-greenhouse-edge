@@ -48,12 +48,33 @@ class BridgeConfig:
     @classmethod
     def from_env(cls, prefix: str = "GREENHOUSE_BRIDGE_") -> "BridgeConfig":
         firebase_enabled = cls._bool_env(os.getenv(f"{prefix}FIREBASE_ENABLED", "0"))
+        telegram_egress_enabled = cls._bool_env(
+            os.getenv(f"{prefix}TELEGRAM_EGRESS_ENABLED", "0")
+        )
+        command_polling_enabled = cls._bool_env(
+            os.getenv(f"{prefix}COMMAND_POLLING_ENABLED", "0")
+        )
+        legacy_command_ingress_enabled = cls._bool_env(
+            os.getenv(f"{prefix}LEGACY_COMMAND_INGRESS_ENABLED", "0")
+        )
+        telegram_required = (
+            telegram_egress_enabled
+            or command_polling_enabled
+            or legacy_command_ingress_enabled
+        )
+        crypto_required = telegram_required
         return cls(
-            telegram_bot_token=cls._require(prefix, "TELEGRAM_BOT_TOKEN"),
-            telegram_chat_id=cls._require(prefix, "TELEGRAM_CHAT_ID"),
-            telegram_egress_enabled=cls._bool_env(
-                os.getenv(f"{prefix}TELEGRAM_EGRESS_ENABLED", "0")
+            telegram_bot_token=cls._require_if(
+                prefix,
+                "TELEGRAM_BOT_TOKEN",
+                telegram_required,
             ),
+            telegram_chat_id=cls._require_if(
+                prefix,
+                "TELEGRAM_CHAT_ID",
+                telegram_required,
+            ),
+            telegram_egress_enabled=telegram_egress_enabled,
             mqtt_host=cls._require(prefix, "MQTT_HOST"),
             mqtt_port=int(cls._require(prefix, "MQTT_PORT")),
             greenhouse1_base_url=os.getenv(f"{prefix}GREENHOUSE1_BASE_URL", "").strip(),
@@ -76,14 +97,10 @@ class BridgeConfig:
             ),
             direct_control_port=int(os.getenv(f"{prefix}DIRECT_CONTROL_PORT", "8787")),
             log_level=os.getenv(f"{prefix}LOG_LEVEL", "INFO").strip() or "INFO",
-            pi_to_app_key_b64=cls._require(prefix, "PI_TO_APP_KEY_B64"),
-            app_to_pi_key_b64=cls._require(prefix, "APP_TO_PI_KEY_B64"),
-            command_polling_enabled=cls._bool_env(
-                os.getenv(f"{prefix}COMMAND_POLLING_ENABLED", "0")
-            ),
-            legacy_command_ingress_enabled=cls._bool_env(
-                os.getenv(f"{prefix}LEGACY_COMMAND_INGRESS_ENABLED", "0")
-            ),
+            pi_to_app_key_b64=cls._require_if(prefix, "PI_TO_APP_KEY_B64", crypto_required),
+            app_to_pi_key_b64=cls._require_if(prefix, "APP_TO_PI_KEY_B64", crypto_required),
+            command_polling_enabled=command_polling_enabled,
+            legacy_command_ingress_enabled=legacy_command_ingress_enabled,
             firebase_enabled=firebase_enabled,
             firebase_database_url=os.getenv(f"{prefix}FIREBASE_DATABASE_URL", "").strip(),
             firebase_service_account_json=os.getenv(
@@ -159,6 +176,12 @@ class BridgeConfig:
         if not value:
             raise RuntimeError(f"Missing required environment variable: {env_name}")
         return value
+
+    @classmethod
+    def _require_if(cls, prefix: str, suffix: str, required: bool) -> str:
+        if required:
+            return cls._require(prefix, suffix)
+        return os.getenv(f"{prefix}{suffix}", "").strip()
 
     @staticmethod
     def _bool_env(raw: str) -> bool:

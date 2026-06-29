@@ -10,7 +10,7 @@ def test_greenhouse1_mqtt_updates_active_state_after_replace() -> None:
 
     store.replace_greenhouse1(
         Greenhouse1State(
-            router_url="http://greenhouse-device.local",
+            router_url="http://old-greenhouse-device.local",
             zone2=ZoneState(state="ERROR_OLD"),
         )
     )

@@ -28,11 +28,17 @@ The public example is expected to start in a non-production posture:
 
 Changing these values may move the experiment closer to live control or external egress and should be reviewed before use.
 
+With these defaults, `BridgeConfig.from_env()` must load without Telegram tokens, service-account JSON, or crypto keys.
+
 ## Optional integrations
 
 - Telegram egress can be disabled with `GREENHOUSE_BRIDGE_TELEGRAM_EGRESS_ENABLED=0`.
 - Firebase-style sync can be disabled with `GREENHOUSE_BRIDGE_FIREBASE_ENABLED=0`.
 - Direct HTTP control should bind to `127.0.0.1` in examples.
+
+Telegram token and chat ID are required when Telegram egress, Telegram command polling, or legacy command ingress is enabled.
+
+App-layer crypto keys are required when encrypted Telegram egress or legacy command ingress features are enabled. They are intentionally not required for the public dry-run posture where those features are disabled.
 
 ## Service-account values
 

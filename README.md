@@ -75,6 +75,7 @@ Reason for public readiness status:
 - The export is sanitized and excludes private IPs, private usernames, private paths, runtime maps, generated outputs, and deployment secrets.
 - Public-readiness checklist result is recorded in `docs/safety.md` as `NEEDS_CLEANUP`.
 - Bridge runtime defaults now use a safer public posture: dry-run enabled, Telegram egress disabled, command polling disabled, and legacy command ingress disabled unless explicitly enabled.
+- `.env.example` can load bridge configuration without Telegram tokens or crypto keys while those optional integrations remain disabled.
 - Logger default outputs use repo-local generated-output directories under `data/`.
 - Experiment records are draft-level and need validation against the sanitized export.
 - Sanitized examples need validation on a non-private test environment.
@@ -145,10 +146,19 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
-./scripts/run_edge_bridge.sh
 ```
 
-Use placeholder hosts first, then replace values only in local `.env`.
+Validate public dry-run configuration without contacting live services:
+
+```bash
+PYTHONPATH=edge python -c "from greenhouse_bridge.config import BridgeConfig; BridgeConfig.from_env(); print('config OK')"
+```
+
+Use placeholder hosts first, then replace values only in local `.env`. Do not start the full bridge runtime against placeholder hosts; use a non-private local broker, mocks, or explicitly reviewed test endpoints before running:
+
+```bash
+./scripts/run_edge_bridge.sh
+```
 
 ## Related experiments
 

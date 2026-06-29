@@ -18,6 +18,7 @@ Reason: this repository is a sanitized public Logline export, but sanitized brid
 - [x] Review logger defaults after sanitization.
 - [x] Expand setup and configuration docs.
 - [x] Align bridge runtime defaults with safe public posture.
+- [x] Validate dry-run bridge config loading from `.env.example` without private secrets.
 - [ ] Validate sanitized bridge imports.
 - [ ] Add decision records for edge boundaries.
 - [ ] Define the smallest non-private reproducible local test environment.
