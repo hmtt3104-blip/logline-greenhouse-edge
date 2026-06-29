@@ -8,7 +8,7 @@ Public readiness: `NEEDS_CLEANUP`
 
 Production readiness: `Not production-ready`
 
-Reason: this repository is a sanitized public Logline export, but sanitized bridge imports, command-dispatch behavior, systemd examples, draft experiment records, and reproducibility still need validation before this repository can be treated as `READY`.
+Reason: this repository is a sanitized public Logline export with verified dry-run imports/config/tests, but command-dispatch behavior, MQTT/Firebase replay, systemd examples, and non-private runtime integration still need validation before this repository can be treated as `READY`.
 
 ## Near-term
 
@@ -19,9 +19,10 @@ Reason: this repository is a sanitized public Logline export, but sanitized brid
 - [x] Expand setup and configuration docs.
 - [x] Align bridge runtime defaults with safe public posture.
 - [x] Validate dry-run bridge config loading from `.env.example` without private secrets.
-- [ ] Validate sanitized bridge imports.
+- [x] Validate sanitized bridge imports with local `PYTHONPATH=edge` import checks.
+- [x] Add focused config/state-store tests for safe dry-run behavior.
 - [ ] Add decision records for edge boundaries.
-- [ ] Define the smallest non-private reproducible local test environment.
+- [ ] Define the smallest non-private reproducible local integration test environment.
 
 ## Experiments to run
 
@@ -36,7 +37,7 @@ Reason: this repository is a sanitized public Logline export, but sanitized brid
 - [ ] Decision record for edge runtime public export boundary.
 - [ ] Decision record for command dispatch safety boundary.
 - [ ] Decision record for systemd supervision model.
-- [ ] Repeatable setup notes for a non-private local test environment.
+- [ ] Repeatable setup notes for a non-private local integration test environment.
 - [ ] Synthetic telemetry samples.
 
 ## Cleanup / review still required
@@ -50,14 +51,13 @@ Reason: this repository is a sanitized public Logline export, but sanitized brid
 
 Public readiness should remain `NEEDS_CLEANUP` until:
 
-- sanitized bridge imports are validated;
+- MQTT telemetry ingestion is validated with synthetic messages or a non-private local broker;
 - command-dispatch behavior is tested against a non-production target or mock;
+- Firebase-style sync is replayed with placeholders, mocks, or a non-production backend;
 - systemd examples are validated with generic paths and placeholder env files;
-- draft experiment records are updated against the sanitized export;
-- the smallest non-private local test path is documented.
+- the smallest non-private local integration test path is documented.
 
 ## Later
 
-- Add small integration tests for config loading.
 - Split optional integrations behind clearer adapters.
 - Evaluate which edge-runtime components can become reusable templates.
